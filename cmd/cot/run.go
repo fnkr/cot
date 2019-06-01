@@ -106,6 +106,7 @@ func getRun() container.RunCommand {
 			CapDrop: []string{"ALL"},
 			CapAdd:  []string{},
 		},
+		ExtraToolArgs: config.ToolArgs(),
 	}
 
 	return run

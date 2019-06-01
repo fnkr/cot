@@ -7,10 +7,11 @@ import (
 )
 
 type RunCommand struct {
-	TTY         bool
-	Interactive bool
-	Create      CreateCommand
-	CmdAndArgs  []string
+	TTY           bool
+	Interactive   bool
+	Create        CreateCommand
+	CmdAndArgs    []string
+	ExtraToolArgs []string
 }
 
 type CreateCommand struct {
@@ -82,6 +83,7 @@ func (rc *RunCommand) ToolArgs() (args []string) {
 		args = append(args, "--cap-add="+val)
 	}
 
+	args = append(args, rc.ExtraToolArgs...)
 	args = append(args, "--", config.Image())
 	args = append(args, rc.CmdAndArgs...)
 

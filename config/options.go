@@ -3,34 +3,42 @@ package config
 import (
 	"fmt"
 	"os"
+	"runtime"
+	"strconv"
 	"strings"
 )
 
 var (
-	isInitEnvPrefix   bool
-	envPrefix         string
-	isInitImage       bool
-	image             string
-	isInitTmp         bool
-	tmp               string
-	isInitNet         bool
-	net               string
-	isInitTTY         bool
-	tty               bool
-	isInitInteractive bool
-	interactive       bool
-	isInitLimit       bool
-	limit             []string
-	isInitLimitString bool
-	limitString       string
-	isInitSSHAuthSock bool
-	sshAuthSock       string
-	isInitShell       bool
-	shell             string
-	isInitDebug       bool
-	debug             bool
-	isInitDryRun      bool
-	dryRun            bool
+	isInitEnvPrefix         bool
+	envPrefix               string
+	isInitImage             bool
+	image                   string
+	isInitTmp               bool
+	tmp                     string
+	isInitNet               bool
+	net                     string
+	isInitTTY               bool
+	tty                     bool
+	isInitInteractive       bool
+	interactive             bool
+	isInitLimit             bool
+	limit                   []string
+	isInitLimitString       bool
+	limitString             string
+	isInitSSHAuthSock       bool
+	sshAuthSock             string
+	isInitShell             bool
+	shell                   string
+	isInitDebug             bool
+	cpus                    string
+	isInitCPUs              bool
+	memory                  string
+	isInitMemory            bool
+	memoryReservation       string
+	isInitMemoryReservation bool
+	debug                   bool
+	isInitDryRun            bool
+	dryRun                  bool
 )
 
 func EnvPrefix() string {
@@ -140,6 +148,43 @@ func Shell() string {
 	}
 
 	return shell
+}
+
+func CPUs() string {
+	if !isInitCPUs {
+		cpus = os.Getenv(EnvPrefix() + "_CPUS")
+		if cpus == "" {
+			if ToolName() == "docker" {
+				cpus = strconv.FormatFloat(float64(runtime.NumCPU())/1.25, 'f', 6, 64)  // 80%
+			}
+		}
+		isInitCPUs = true
+	}
+
+	return cpus
+}
+
+func Memory() string {
+	if !isInitMemory {
+		memory = os.Getenv(EnvPrefix() + "_MEMORY")
+		isInitMemory = true
+	}
+
+	return memory
+}
+
+func MemoryReservation() string {
+	if !isInitMemoryReservation {
+		memoryReservation = os.Getenv(EnvPrefix() + "_MEMORY_RESERVATION")
+		if memoryReservation == "" {
+			if ToolName() == "docker" {
+				memoryReservation = "1g"
+			}
+		}
+		isInitMemoryReservation = true
+	}
+
+	return memoryReservation
 }
 
 func Debug() bool {

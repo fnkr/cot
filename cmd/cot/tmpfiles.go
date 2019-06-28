@@ -12,8 +12,9 @@ import (
 
 func writePasswdFile() {
 	path := filepath.Join(config.Tmp(), "etc", "passwd")
+	tmpPath := path + "." + randStr()
 
-	file, err := os.Create(path)
+	file, err := os.Create(tmpPath)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s: error: %s\n", config.BinName(), err.Error())
 		os.Exit(1)
@@ -52,12 +53,18 @@ func writePasswdFile() {
 		fmt.Fprintf(os.Stderr, "%s: error: %s\n", config.BinName(), err.Error())
 		os.Exit(1)
 	}
+
+	if err := os.Rename(tmpPath, path); err != nil {
+		fmt.Fprintf(os.Stderr, "%s: error: %s\n", config.BinName(), err.Error())
+		os.Exit(1)
+	}
 }
 
 func writeGroupFile() {
 	path := filepath.Join(config.Tmp(), "etc", "group")
+	tmpPath := path + "." + randStr()
 
-	file, err := os.Create(path)
+	file, err := os.Create(tmpPath)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s: error: %s\n", config.BinName(), err.Error())
 		os.Exit(1)
@@ -84,6 +91,11 @@ func writeGroupFile() {
 			},
 		},
 	}, file); err != nil {
+		fmt.Fprintf(os.Stderr, "%s: error: %s\n", config.BinName(), err.Error())
+		os.Exit(1)
+	}
+
+	if err := os.Rename(tmpPath, path); err != nil {
 		fmt.Fprintf(os.Stderr, "%s: error: %s\n", config.BinName(), err.Error())
 		os.Exit(1)
 	}

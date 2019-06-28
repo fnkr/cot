@@ -65,6 +65,7 @@ func getRun() container.RunCommand {
 		env["SSH_AUTH_SOCK"] = containerSSHAuthSock
 	}
 
+	env["COT_CONTAINER"] = config.ToolName()
 	env["EDITOR"] = os.Getenv("EDITOR")
 
 	uidmaps := []container.UIDMap{}

@@ -23,7 +23,7 @@ func Tool() []string {
 			if Podman() != "" {
 				tool = []string{Podman()}
 			} else if Docker() != "" {
-				if InDockerGroup() {
+				if DockerSocketIsWritable() {
 					tool = []string{Docker()}
 				} else {
 					if Sudo() != "" {

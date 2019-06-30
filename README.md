@@ -25,7 +25,7 @@ sudo dnf install golang libselinux-devel
 
 ## Build
 
-cot uses the Go standard library only.
+Only standard library and golang.org/x is used.
 
 ```sh
 go get github.com/fnkr/cot/cmd/cot

@@ -3,8 +3,6 @@ package config
 import (
 	"fmt"
 	"os"
-	"runtime"
-	"strconv"
 	"strings"
 )
 
@@ -160,9 +158,7 @@ func CPUs() string {
 	if !isInitCPUs {
 		cpus = os.Getenv(EnvPrefix() + "_CPUS")
 		if cpus == "" {
-			if ToolName() == "docker" {
-				cpus = strconv.FormatFloat(float64(runtime.NumCPU())/1.25, 'f', 6, 64) // 80%
-			}
+			cpus = CPUsDefault()
 		}
 		isInitCPUs = true
 	}
@@ -202,9 +198,7 @@ func MemoryReservation() string {
 	if !isInitMemoryReservation {
 		memoryReservation = os.Getenv(EnvPrefix() + "_MEMORY_RESERVATION")
 		if memoryReservation == "" {
-			if ToolName() == "docker" {
-				memoryReservation = "1g"
-			}
+			memoryReservation = MemoryReservationDefault()
 		}
 		isInitMemoryReservation = true
 	}

@@ -9,4 +9,5 @@ build_cot() {
     chmod +x "$3"
 }
 build_cot linux  amd64 ../../_build/cot_linux_amd64
+build_cot darwin amd64 ../../_build/cot_linux_darwin
 popd

@@ -1,6 +1,8 @@
+// +build linux,cgo
+
 package config
 
-// //cgo  linux CFLAGS: -Iinclude -I.
+// #cgo linux CFLAGS: -Iinclude -I.
 // #cgo pkg-config: libselinux
 // #include <selinux/selinux.h>
 // #include <selinux/label.h>

@@ -15,16 +15,19 @@ type RunCommand struct {
 }
 
 type CreateCommand struct {
-	Image   string
-	Rm      bool
-	User    string
-	UIDMaps []UIDMap
-	Net     string
-	WorkDir string
-	Volumes []Volume
-	Env     map[string]string
-	CapDrop []string
-	CapAdd  []string
+	Image             string
+	Rm                bool
+	User              string
+	UIDMaps           []UIDMap
+	Net               string
+	WorkDir           string
+	Volumes           []Volume
+	Env               map[string]string
+	CapDrop           []string
+	CapAdd            []string
+	CPUs              string
+	Memory            string
+	MemoryReservation string
 }
 
 type Volume struct {
@@ -81,6 +84,18 @@ func (rc *RunCommand) ToolArgs() (args []string) {
 
 	for _, val := range rc.Create.CapAdd {
 		args = append(args, "--cap-add="+val)
+	}
+
+	if rc.Create.CPUs != "" {
+		args = append(args, "--cpus="+rc.Create.CPUs)
+	}
+
+	if rc.Create.Memory != "" {
+		args = append(args, "--memory="+rc.Create.Memory)
+	}
+
+	if rc.Create.MemoryReservation != "" {
+		args = append(args, "--memory-reservation="+rc.Create.MemoryReservation)
 	}
 
 	args = append(args, rc.ExtraToolArgs...)

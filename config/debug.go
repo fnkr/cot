@@ -32,6 +32,9 @@ func PrintConfig(w io.Writer) {
 	fmt.Fprintf(w, "LimitString() = %v\n", LimitString())
 	fmt.Fprintf(w, "SSHAuthSock() = %v\n", SSHAuthSock())
 	fmt.Fprintf(w, "Shell() = %v\n", Shell())
+	fmt.Fprintf(w, "CPUs() = %v\n", CPUs())
+	fmt.Fprintf(w, "Memory() = %v\n", Memory())
+	fmt.Fprintf(w, "MemoryReservation() = %v\n", MemoryReservation())
 	fmt.Fprintf(w, "Debug() = %v\n", Debug())
 	fmt.Fprintf(w, "DryRun() = %v\n", DryRun())
 }

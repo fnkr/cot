@@ -36,6 +36,10 @@ var (
 	isInitMemory            bool
 	memoryReservation       string
 	isInitMemoryReservation bool
+	capAdd                  []string
+	isInitCapAdd            bool
+	capDrop                 []string
+	isInitCapDrop           bool
 	debug                   bool
 	isInitDryRun            bool
 	dryRun                  bool
@@ -155,7 +159,7 @@ func CPUs() string {
 		cpus = os.Getenv(EnvPrefix() + "_CPUS")
 		if cpus == "" {
 			if ToolName() == "docker" {
-				cpus = strconv.FormatFloat(float64(runtime.NumCPU())/1.25, 'f', 6, 64)  // 80%
+				cpus = strconv.FormatFloat(float64(runtime.NumCPU())/1.25, 'f', 6, 64) // 80%
 			}
 		}
 		isInitCPUs = true
@@ -171,6 +175,25 @@ func Memory() string {
 	}
 
 	return memory
+}
+
+func CapAdd() []string {
+	if !isInitCapAdd {
+		capAdd = listFromEnv(EnvPrefix()+"_CAP_ADD", ",")
+		isInitCapAdd = true
+	}
+	return capAdd
+}
+
+func CapDrop() []string {
+	if !isInitCapDrop {
+		capDrop = listFromEnv(EnvPrefix()+"_CAP_DROP", ",")
+		if len(capDrop) == 0 {
+			capDrop = []string{"ALL"}
+		}
+		isInitCapDrop = true
+	}
+	return capDrop
 }
 
 func MemoryReservation() string {

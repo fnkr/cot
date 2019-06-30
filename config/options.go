@@ -40,6 +40,8 @@ var (
 	isInitCapAdd            bool
 	capDrop                 []string
 	isInitCapDrop           bool
+	env                     map[string]string
+	isInitEnv               bool
 	debug                   bool
 	isInitDryRun            bool
 	dryRun                  bool
@@ -208,6 +210,28 @@ func MemoryReservation() string {
 	}
 
 	return memoryReservation
+}
+
+func Env() map[string]string {
+	if !isInitEnv {
+		env = map[string]string{}
+
+		for _, evar := range os.Environ() {
+			if !strings.HasPrefix(evar, "COT_ENV_") {
+				continue
+			}
+
+			pair := strings.SplitN(evar, "=", 2)
+			if len(pair) < 2 {
+				continue
+			}
+
+			env[strings.TrimPrefix(pair[0], "COT_ENV_")] = pair[1]
+		}
+		isInitEnv = true
+	}
+
+	return env
 }
 
 func Debug() bool {

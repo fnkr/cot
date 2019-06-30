@@ -67,6 +67,10 @@ func getRun() container.RunCommand {
 
 	env["EDITOR"] = os.Getenv("EDITOR")
 
+	for key, val := range config.Env() {
+		env[key] = val
+	}
+
 	uidmaps := []container.UIDMap{}
 
 	if config.ToolName() == "podman" {

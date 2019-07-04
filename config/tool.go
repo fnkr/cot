@@ -81,6 +81,9 @@ func ToolName() string {
 func ToolArgs() []string {
 	if !isInitToolArgs {
 		toolArgs = listFromEnv(EnvPrefix()+"_ARGS", " ")
+		for _, toolArg := range listFromEnvs(EnvPrefix() + "_ARG_") {
+			toolArgs = append(toolArgs, toolArg)
+		}
 		isInitToolArgs = true
 	}
 

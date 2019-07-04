@@ -30,3 +30,21 @@ func listFromEnv(key, sep string) (res []string) {
 	return
 }
 
+func listFromEnvs(prefix string) map[string]string {
+	list := map[string]string{}
+
+	for _, evar := range os.Environ() {
+		if !strings.HasPrefix(evar, prefix) {
+			continue
+		}
+
+		pair := strings.SplitN(evar, "=", 2)
+		if len(pair) < 2 {
+			pair[1] = ""
+		}
+
+		list[strings.TrimPrefix(pair[0], prefix)] = pair[1]
+	}
+
+	return list
+}

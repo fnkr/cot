@@ -208,20 +208,7 @@ func MemoryReservation() string {
 
 func Env() map[string]string {
 	if !isInitEnv {
-		env = map[string]string{}
-
-		for _, evar := range os.Environ() {
-			if !strings.HasPrefix(evar, "COT_ENV_") {
-				continue
-			}
-
-			pair := strings.SplitN(evar, "=", 2)
-			if len(pair) < 2 {
-				continue
-			}
-
-			env[strings.TrimPrefix(pair[0], "COT_ENV_")] = pair[1]
-		}
+		env = listFromEnvs(EnvPrefix() + "_ENV_")
 		isInitEnv = true
 	}
 

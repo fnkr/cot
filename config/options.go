@@ -27,19 +27,19 @@ var (
 	sshAuthSock             string
 	isInitShell             bool
 	shell                   string
-	isInitDebug             bool
-	cpus                    string
 	isInitCPUs              bool
-	memory                  string
+	cpus                    string
 	isInitMemory            bool
-	memoryReservation       string
+	memory                  string
 	isInitMemoryReservation bool
-	capAdd                  []string
+	memoryReservation       string
 	isInitCapAdd            bool
-	capDrop                 []string
+	capAdd                  []string
 	isInitCapDrop           bool
-	env                     map[string]string
+	capDrop                 []string
 	isInitEnv               bool
+	env                     map[string]string
+	isInitDebug             bool
 	debug                   bool
 	isInitDryRun            bool
 	dryRun                  bool

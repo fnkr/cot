@@ -39,6 +39,8 @@ var (
 	capDrop                 []string
 	isInitEnv               bool
 	env                     map[string]string
+	isInitVolumes           bool
+	volumes                 []string
 	isInitDebug             bool
 	debug                   bool
 	isInitDryRun            bool
@@ -213,6 +215,20 @@ func Env() map[string]string {
 	}
 
 	return env
+}
+
+func Volumes() []string {
+	if !isInitVolumes {
+		for _, volume := range listFromEnvs(EnvPrefix() + "_VOLUME_") {
+			if volume == "" {
+				continue
+			}
+			volumes = append(volumes, volume)
+		}
+		isInitVolumes = true
+	}
+
+	return volumes
 }
 
 func Debug() bool {

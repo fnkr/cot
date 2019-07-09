@@ -35,6 +35,7 @@ func PrintConfig(w io.Writer) {
 	fmt.Fprintf(w, "CPUs() = %v\n", CPUs())
 	fmt.Fprintf(w, "Memory() = %v\n", Memory())
 	fmt.Fprintf(w, "MemoryReservation() = %v\n", MemoryReservation())
+	fmt.Fprintf(w, "Volumes() = %v\n", Volumes())
 	fmt.Fprintf(w, "Debug() = %v\n", Debug())
 	fmt.Fprintf(w, "DryRun() = %v\n", DryRun())
 }

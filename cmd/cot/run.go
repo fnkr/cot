@@ -97,6 +97,12 @@ func getRun() container.RunCommand {
 		)
 	}
 
+	toolArgs := config.ToolArgs()
+
+	for _, volume := range config.Volumes() {
+		toolArgs = append(toolArgs, "--volume="+volume)
+	}
+
 	run := container.RunCommand{
 		TTY:         config.TTY(),
 		Interactive: config.Interactive(),
@@ -116,7 +122,7 @@ func getRun() container.RunCommand {
 			Memory:            config.Memory(),
 			MemoryReservation: config.MemoryReservation(),
 		},
-		ExtraToolArgs: config.ToolArgs(),
+		ExtraToolArgs: toolArgs,
 	}
 
 	return run

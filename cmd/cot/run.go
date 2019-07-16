@@ -112,6 +112,7 @@ func getRun() container.RunCommand {
 			Rm:                true,
 			User:              config.UID() + ":" + config.GID(),
 			UIDMaps:           uidmaps,
+			ReadOnlyRoot:      config.ReadOnlyRoot(),
 			Net:               config.Network(),
 			Volumes:           volumes,
 			Env:               env,

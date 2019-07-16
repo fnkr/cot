@@ -26,6 +26,7 @@ func PrintConfig(w io.Writer) {
 	fmt.Fprintf(w, "ToolArgs() = %v\n", ToolArgs())
 	fmt.Fprintf(w, "Image() = %v\n", Image())
 	fmt.Fprintf(w, "Tmp() = %v\n", Tmp())
+	fmt.Fprintf(w, "ReadOnlyRoot() = %v\n", ReadOnlyRoot())
 	fmt.Fprintf(w, "Network() = %v\n", Network())
 	fmt.Fprintf(w, "TTY() = %v\n", TTY())
 	fmt.Fprintf(w, "Interactive() = %v\n", Interactive())

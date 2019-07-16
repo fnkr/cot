@@ -13,6 +13,8 @@ var (
 	image                   string
 	isInitTmp               bool
 	tmp                     string
+	isInitReadOnlyRoot      bool
+	readOnlyRoot            bool
 	isInitNet               bool
 	net                     string
 	isInitTTY               bool
@@ -78,6 +80,19 @@ func Tmp() string {
 	}
 
 	return tmp
+}
+
+func ReadOnlyRoot() bool {
+	if !isInitReadOnlyRoot {
+		def := true
+		if ToolName() == "podman" {
+			def = false
+		}
+		readOnlyRoot = boolFromEnv(EnvPrefix()+"_READ_ONLY_ROOT", def)
+		isInitReadOnlyRoot = true
+	}
+
+	return readOnlyRoot
 }
 
 func Network() string {

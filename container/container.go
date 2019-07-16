@@ -19,6 +19,7 @@ type CreateCommand struct {
 	Rm                bool
 	User              string
 	UIDMaps           []UIDMap
+	ReadOnlyRoot      bool
 	Net               string
 	WorkDir           string
 	Volumes           []Volume
@@ -52,6 +53,7 @@ func (rc *RunCommand) ToolArgs() (args []string) {
 		"--tty="+strconv.FormatBool(rc.TTY),
 		"--interactive="+strconv.FormatBool(rc.Interactive),
 		"--rm="+strconv.FormatBool(rc.Create.Rm),
+		"--read-only="+strconv.FormatBool(rc.Create.ReadOnlyRoot),
 	)
 
 	if rc.Create.User != "" {

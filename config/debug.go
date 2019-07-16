@@ -18,6 +18,7 @@ func PrintConfig(w io.Writer) {
 	fmt.Fprintf(w, "GID() = %v\n", GID())
 	fmt.Fprintf(w, "User() = %v\n", User())
 	fmt.Fprintf(w, "Group() = %v\n", Group())
+	fmt.Fprintf(w, "InDockerGroup() = %v\n", InDockerGroup())
 	fmt.Fprintf(w, "DockerSocketIsWritable() = %v\n", DockerSocketIsWritable())
 	fmt.Fprintf(w, "HomeDir() = %v\n", HomeDir())
 	fmt.Fprintf(w, "Tool() = %v\n", Tool())

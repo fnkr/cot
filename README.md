@@ -56,6 +56,8 @@ sudo ln -s /usr/local/bin/cot /usr/local/bin/npm
 npm install
 ```
 
+A full list of configuration options can be found in [`ENVIRONMENT.md`](ENVIRONMENT.md).
+
 ## Custom images
 
 By default the `fnkr/cot` image is used.

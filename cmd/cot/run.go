@@ -12,13 +12,13 @@ func getRun() container.RunCommand {
 		container.Volume{
 			HostDir:      config.Tmp() + "/etc/passwd",
 			ContainerDir: "/etc/passwd",
-			Writable:     false,
+			Writable:     config.ToolName() == config.PODMAN,
 			SELabel:      false,
 		},
 		container.Volume{
 			HostDir:      config.Tmp() + "/etc/group",
 			ContainerDir: "/etc/group",
-			Writable:     false,
+			Writable:     config.ToolName() == config.PODMAN,
 			SELabel:      false,
 		},
 		container.Volume{
@@ -60,6 +60,7 @@ func getRun() container.RunCommand {
 		volumes = append(volumes, container.Volume{
 			HostDir:      config.SSHAuthSock(),
 			ContainerDir: containerSSHAuthSock,
+			Writable:     config.ToolName() == config.PODMAN,
 			SELabel:      config.SELinuxEnabled(),
 		})
 		env["SSH_AUTH_SOCK"] = containerSSHAuthSock

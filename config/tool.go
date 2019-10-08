@@ -7,6 +7,11 @@ import (
 	"strings"
 )
 
+const (
+	PODMAN = "podman"
+	DOCKER = "docker"
+)
+
 var (
 	isInitTool     bool
 	tool           []string
@@ -59,9 +64,9 @@ func ToolName() string {
 	if !isInitToolName {
 		for _, toolPart := range Tool() {
 			if strings.HasSuffix(toolPart, "/podman") || toolPart == "podman" {
-				toolName = "podman"
+				toolName = PODMAN
 			} else if strings.HasSuffix(toolPart, "/docker") || toolPart == "docker" {
-				toolName = "docker"
+				toolName = DOCKER
 			}
 			if toolName != "" {
 				break

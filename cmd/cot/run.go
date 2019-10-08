@@ -76,7 +76,7 @@ func getRun() container.RunCommand {
 
 	uidmaps := []container.UIDMap{}
 
-	if config.ToolName() == "podman" {
+	if config.ToolName() == config.PODMAN {
 		uidmaps = append(uidmaps,
 			container.UIDMap{
 				HostUID:      "0",

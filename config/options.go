@@ -85,7 +85,7 @@ func Tmp() string {
 func ReadOnlyRoot() bool {
 	if !isInitReadOnlyRoot {
 		def := true
-		if ToolName() == "podman" {
+		if ToolName() == PODMAN {
 			def = false
 		}
 		readOnlyRoot = boolFromEnv(EnvPrefix()+"_READ_ONLY_ROOT", def)
@@ -99,9 +99,9 @@ func Network() string {
 	if !isInitNet {
 		net = os.Getenv(EnvPrefix() + "_NET")
 		if net == "" {
-			if ToolName() == "podman" {
+			if ToolName() == PODMAN {
 				net = "slirp4netns"
-			} else if ToolName() == "docker" {
+			} else if ToolName() == DOCKER {
 				net = "bridge"
 			} else {
 				fmt.Fprintf(os.Stderr, "%s: error: not implemented: ToolName(%s)\n", BinName(), ToolName())

@@ -68,8 +68,8 @@ func getRun() container.RunCommand {
 		env["SSH_AUTH_SOCK"] = containerSSHAuthSock
 	}
 
-	editor := os.Getenv("EDITOR")
-	if editor != "" {
+
+	if editor := os.Getenv("EDITOR"); editor != "" {
 		env["EDITOR"] = editor
 	}
 

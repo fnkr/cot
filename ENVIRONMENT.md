@@ -22,6 +22,7 @@
 | `COT_TOOL`               | `"podman"` if found in `$PATH`, `"docker"` if found in `$PATH` and `$USER` is in `docker` group, otherwise `"sudo docker"` | `podman`, `docker`, or path to Podman or Docker (which must end with `/podman` or `/docker`) |
 | `COT_TTY`                | `true`  | `--tty` |
 | `COT_VOLUME_*`           | `[]`    | Additional volumes to mount (`COT_VOLUME_foo=/mnt/cot:/mnt:ro,z` will become `--volume=/mnt/cot:/mnt:ro,z`) |
+| `EDITOR`                 | -       | Variable will be forwarded to container as-is |
 | `SSH_AUTH_SOCK`          | -       | Path to SSH agent socket (will be mounted in container if set) |
 
 `*` is a placeholder, all matching variables will be used. 

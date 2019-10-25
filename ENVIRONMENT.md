@@ -26,3 +26,8 @@
 | `SSH_AUTH_SOCK`          | -       | Path to SSH agent socket (will be mounted in container if set) |
 
 `*` is a placeholder, all matching variables will be used. 
+
+# List of environment variables set by cot
+| Variable                 | Description |
+| ------------------------ | ----------- |
+| `COT_ISOLATED`           | Will be set to `config.ToolName()` (either `podman` or `docker`) |

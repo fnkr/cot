@@ -53,7 +53,9 @@ func getRun() container.RunCommand {
 		},
 	}
 
-	env := map[string]string{}
+	env := map[string]string{
+		"COT_ISOLATED": config.ToolName(),
+	}
 
 	if config.SSHAuthSock() != "" {
 		containerSSHAuthSock := config.HomeDir() + "/.ssh/auth.sock"

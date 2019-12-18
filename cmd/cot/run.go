@@ -81,29 +81,6 @@ func getRun() container.RunCommand {
 		env[key] = val
 	}
 
-	uidmaps := []container.UIDMap{}
-
-	if config.ToolName() == config.PODMAN {
-		uidmaps = append(uidmaps,
-			container.UIDMap{
-				HostUID:      "0",
-				ContainerUID: config.UID(),
-				Amount:       "1",
-			},
-			container.UIDMap{
-				HostUID:      "1",
-				ContainerUID: "0",
-				Amount:       config.UID(),
-			},
-			// TODO: Fix missing UIDMap
-			/*container.UIDMap{
-				ContainerUID: "1001",  // config.UID() + 1,
-				HostUID:      "1001",  // config.UID() + 1,
-				Amount:       "64516", // 65536 - config.UID(),
-			},*/
-		)
-	}
-
 	toolArgs := config.ToolArgs()
 
 	for _, volume := range config.Volumes() {
@@ -118,7 +95,6 @@ func getRun() container.RunCommand {
 			Image:             config.Image(),
 			Rm:                true,
 			User:              config.UID() + ":" + config.GID(),
-			UIDMaps:           uidmaps,
 			ReadOnlyRoot:      config.ReadOnlyRoot(),
 			Net:               config.Network(),
 			Volumes:           volumes,

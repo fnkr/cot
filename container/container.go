@@ -58,6 +58,9 @@ func (rc *RunCommand) ToolArgs() (args []string) {
 
 	if rc.Create.User != "" {
 		args = append(args, "--user="+rc.Create.User)
+		if config.ToolName() == config.PODMAN {
+			args = append(args, "--userns=keep-id")
+		}
 	}
 
 	for _, uidmap := range rc.Create.UIDMaps {

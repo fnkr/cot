@@ -27,6 +27,8 @@ var (
 	limitString             string
 	isInitSSHAuthSock       bool
 	sshAuthSock             string
+	mountSSHKnownHosts      bool
+	isInitMountSSHKnownHosts bool
 	isInitShell             bool
 	shell                   string
 	isInitCPUs              bool
@@ -157,6 +159,15 @@ func SSHAuthSock() string {
 	}
 
 	return sshAuthSock
+}
+
+func MountSSHKnownHosts() bool {
+	if !isInitMountSSHKnownHosts {
+		mountSSHKnownHosts = boolFromEnv(EnvPrefix()+"_MOUNT_SSH_KNOWN_HOSTS", true)
+		isInitMountSSHKnownHosts = true
+	}
+
+	return mountSSHKnownHosts
 }
 
 func Shell() string {

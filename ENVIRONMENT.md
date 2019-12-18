@@ -18,6 +18,7 @@
 | `COT_NET`                | `"slirp4netns"` (Podman), `"bridge"` (Docker) | [`--net`](https://docs.docker.com/engine/reference/run/#network-settings) |
 | `COT_READ_ONLY_ROOT`     | `false` if Podman is used, `true` if Docker is used | Mount root directory (`/`) read-only |
 | `COT_SHELL`              | `"/bin/sh"` | Default shell for user in container in `/etc/passwd` |
+| `COT_MOUNT_SSH_KNOWN_HOSTS` | `true` | Mount known hosts ~/.ssh/known_hosts file from host |
 | `COT_TMP`                | `fmt.Sprintf("/tmp/%s-%s-%s", BinName(), ToolName(), UID())` | Path to temporary directory, used for `/etc/{passwd,group}`, `/tmp` and `/home/$USER` mounts |
 | `COT_TOOL`               | `"podman"` if found in `$PATH`, `"docker"` if found in `$PATH` and `$USER` is in `docker` group, otherwise `"sudo docker"` | `podman`, `docker`, or path to Podman or Docker (which must end with `/podman` or `/docker`) |
 | `COT_TTY`                | `true`  | `--tty` |

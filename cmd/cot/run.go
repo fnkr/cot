@@ -40,12 +40,6 @@ func getRun() container.RunCommand {
 			SELabel:      config.SELinuxEnabled(),
 		},
 		container.Volume{
-			HostDir:      config.HomeDir() + "/.ssh/known_hosts",
-			ContainerDir: config.HomeDir() + "/.ssh/known_hosts",
-			Writable:     false,
-			SELabel:      config.SELinuxEnabled(),
-		},
-		container.Volume{
 			HostDir:      config.WorkDir(),
 			ContainerDir: config.WorkDir(),
 			Writable:     true,
@@ -66,6 +60,16 @@ func getRun() container.RunCommand {
 			SELabel:      config.SELinuxEnabled(),
 		})
 		env["SSH_AUTH_SOCK"] = containerSSHAuthSock
+	}
+
+
+	if config.MountSSHKnownHosts() {
+		volumes = append(volumes, container.Volume{
+			HostDir:      config.HomeDir() + "/.ssh/known_hosts",
+			ContainerDir: config.HomeDir() + "/.ssh/known_hosts",
+			Writable:     false,
+			SELabel:      config.SELinuxEnabled(),
+		})
 	}
 
 

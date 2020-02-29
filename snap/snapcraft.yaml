@@ -1,0 +1,18 @@
+name: cot
+version: git
+summary: Convenient way to containerize command line applications with Podman or Docker
+description: |
+  The basic concept is to have a wrapper for `docker run` that creates a virtual environment that grossly matches
+  the host environment and gives the containerized process access to the current directory only.
+confinement: classic
+base: core18
+grade: stable
+parts:
+  cot:
+    plugin: dump
+    source: _build
+    build-attributes:
+      - no-patchelf
+apps:
+  cot:
+    command: cot

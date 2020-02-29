@@ -1,26 +1,117 @@
 on: push
 name: Build
 jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install requirements
+        run: sudo apt update && sudo apt -y install libselinux1-dev
+      - name: Clone repository
+        uses: actions/checkout@v2
+      - name: Run tests
+        run: go test ./...
+
   build:
     name: Build
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os:
+          - linux
+          - darwin
+        arch:
+          - amd64
     steps:
-      - uses: actions/checkout@master
-
-      - name: Test
-        uses: ./.ci
+      - name: Install requirements
+        run: sudo apt update && sudo apt -y install libselinux1-dev
+      - name: Clone repository
+        uses: actions/checkout@v2
+      - name: Run build
+        run: cd cmd/cot && GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -ldflags "-s -w" -o "../../cot_${{ matrix.os }}_${{ matrix.arch }}"
+      - name: Calculate checksum
+        run: sha256sum cot_${{ matrix.os }}_${{ matrix.arch }}
+      - name: Upload artifact
+        uses: actions/upload-artifact@v1
         with:
-          args: /test
+          name: cot_${{ matrix.os }}_${{ matrix.arch }}
+          path: cot_${{ matrix.os }}_${{ matrix.arch }}
 
-      - name: Build
-        uses: ./.ci
+  build_snap:
+    name: Build .snap
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    strategy:
+      matrix:
+        arch:
+          - amd64
+    steps:
+      - name: Install Snapcraft
+        run: sudo apt update && sudo apt -y remove lxd lxd-client && sudo apt -y install snap && sudo snap install lxd && sudo lxd init --auto && sudo snap install --classic snapcraft
+      - name: Clone repository
+        uses: actions/checkout@v2
+      - name: Download artifact
+        uses: actions/download-artifact@v1
         with:
-          args: /build
+          name: cot_linux_${{ matrix.arch }}
+      - name: Build .snap
+        run: mkdir _build && mv cot_linux_${{ matrix.arch }}/cot_linux_${{ matrix.arch }} _build/cot && chmod a+x _build/cot && sudo snapcraft --use-lxd --target-arch ${{ matrix.arch }}
+      - name: Calculate checksum
+        run: sha256sum cot_*.snap && mv cot_*.snap cot_linux_${{ matrix.arch }}.snap
+      - name: Upload artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: cot_linux_${{ matrix.arch }}.snap
+          path: cot_linux_${{ matrix.arch }}.snap
 
-      - name: Release
+  release_github:
+    if: startsWith(github.event.ref, 'refs/tags/')
+    needs:
+      - test
+      - build
+    name: Release on GitHub
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os:
+          - linux
+          - darwin
+        arch:
+          - amd64
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: cot_${{ matrix.os }}_${{ matrix.arch }}
+      - name: Release artifact
         uses: fnkr/github-action-ghr@v1
         env:
           GHR_COMPRESS: gz
-          GHR_PATH: _build/
+          GHR_PATH: cot_${{ matrix.os }}_${{ matrix.arch }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        if: startsWith(github.event.ref, 'refs/tags/')
+
+  release_snapcraft:
+    if: startsWith(github.event.ref, 'refs/tags/')
+    needs:
+      - test
+      - build_snap
+    name: Release on Snapcraft
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch:
+          - amd64
+    steps:
+      - name: Install Snapcraft
+        run: sudo apt update && sudo apt -y install snap && sudo snap install --classic snapcraft
+      - name: Download artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: cot_linux_${{ matrix.arch }}.snap
+      - name: Login to Snapcraft
+        run: echo "$SNAPCRAFT_LOGIN" | snapcraft login --with -
+        env:
+          SNAPCRAFT_LOGIN: ${{ secrets.SNAPCRAFT_LOGIN }}
+      - name: Push to Snapcraft
+        run: cd cot_linux_${{ matrix.arch }}.snap && snapcraft push cot_linux_${{ matrix.arch }}.snap

@@ -23,6 +23,12 @@ By default, cot will
 sudo dnf install golang libselinux-devel
 ```
 
+### Ubuntu
+
+```sh
+sudo apt install golang libselinux1-dev
+```
+
 ## Build
 
 Only standard library and golang.org/x is used.

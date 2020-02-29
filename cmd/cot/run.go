@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/fnkr/cot/config"
@@ -60,6 +61,13 @@ func getRun() container.RunCommand {
 			SELabel:      config.SELinuxEnabled(),
 		})
 		env["SSH_AUTH_SOCK"] = containerSSHAuthSock
+
+		if config.MakeSSHAuthSockAccessible() {
+			if err := makeSSHAuthSockAccessible(); err != nil {
+				fmt.Fprintf(os.Stderr, "%s: error: %s\n", config.BinName(), err.Error())
+				os.Exit(1)
+			}
+		}
 	}
 
 

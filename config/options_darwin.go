@@ -9,3 +9,7 @@ func CPUsDefault() string {
 func MemoryReservationDefault() string {
 	return ""
 }
+
+func SSHAuthSock() string {
+	return "/run/host-services/ssh-auth.sock"
+}

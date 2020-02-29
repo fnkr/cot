@@ -67,10 +67,3 @@ You can use a custom image by setting the `COT_IMAGE` environment variable.
 ```sh
 COT_IMAGE=ubuntu cot uname -a
 ```
-
-## macOS
-
-Although cot works on macOS, Docker for Mac does not yet support sharing unix sockets
-[[1](https://github.com/docker/for-mac/issues/483), [2](https://github.com/docker/for-mac/issues/410)].
-To fix SSH agent forwarding on macOS you can install this workaround I made for my employer:
-[punktDe/docker-mac-ssh-auth-sock](https://github.com/punktDe/docker-mac-ssh-auth-sock).

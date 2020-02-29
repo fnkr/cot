@@ -7,48 +7,48 @@ import (
 )
 
 var (
-	isInitEnvPrefix          bool
-	envPrefix                string
-	isInitImage              bool
-	image                    string
-	isInitTmp                bool
-	tmp                      string
-	isInitReadOnlyRoot       bool
-	readOnlyRoot             bool
-	isInitNet                bool
-	net                      string
-	isInitTTY                bool
-	tty                      bool
-	isInitInteractive        bool
-	interactive              bool
-	isInitLimit              bool
-	limit                    []string
-	isInitLimitString        bool
-	limitString              string
-	isInitSSHAuthSock        bool
-	sshAuthSock              string
-	mountSSHKnownHosts       bool
-	isInitMountSSHKnownHosts bool
-	isInitShell              bool
-	shell                    string
-	isInitCPUs               bool
-	cpus                     string
-	isInitMemory             bool
-	memory                   string
-	isInitMemoryReservation  bool
-	memoryReservation        string
-	isInitCapAdd             bool
-	capAdd                   []string
-	isInitCapDrop            bool
-	capDrop                  []string
-	isInitEnv                bool
-	env                      map[string]string
-	isInitVolumes            bool
-	volumes                  []string
-	isInitDebug              bool
-	debug                    bool
-	isInitDryRun             bool
-	dryRun                   bool
+	isInitEnvPrefix                 bool
+	envPrefix                       string
+	isInitImage                     bool
+	image                           string
+	isInitTmp                       bool
+	tmp                             string
+	isInitReadOnlyRoot              bool
+	readOnlyRoot                    bool
+	isInitNet                       bool
+	net                             string
+	isInitTTY                       bool
+	tty                             bool
+	isInitInteractive               bool
+	interactive                     bool
+	isInitLimit                     bool
+	limit                           []string
+	isInitLimitString               bool
+	limitString                     string
+	isInitMakeSSHAuthSockAccessible bool
+	makeSSHAuthSockAccessible       bool
+	mountSSHKnownHosts              bool
+	isInitMountSSHKnownHosts        bool
+	isInitShell                     bool
+	shell                           string
+	isInitCPUs                      bool
+	cpus                            string
+	isInitMemory                    bool
+	memory                          string
+	isInitMemoryReservation         bool
+	memoryReservation               string
+	isInitCapAdd                    bool
+	capAdd                          []string
+	isInitCapDrop                   bool
+	capDrop                         []string
+	isInitEnv                       bool
+	env                             map[string]string
+	isInitVolumes                   bool
+	volumes                         []string
+	isInitDebug                     bool
+	debug                           bool
+	isInitDryRun                    bool
+	dryRun                          bool
 )
 
 func EnvPrefix() string {
@@ -152,15 +152,14 @@ func LimitString() string {
 	return limitString
 }
 
-func SSHAuthSock() string {
-	if !isInitSSHAuthSock {
-		sshAuthSock = os.Getenv("SSH_AUTH_SOCK")
-		isInitSSHAuthSock = true
+func MakeSSHAuthSockAccessible() bool {
+	if !isInitMakeSSHAuthSockAccessible {
+		makeSSHAuthSockAccessible = boolFromEnv(EnvPrefix()+"_MAKE_SSH_AUTH_SOCK_ACCESSIBLE", true)
+		isInitMakeSSHAuthSockAccessible = true
 	}
 
-	return sshAuthSock
+	return makeSSHAuthSockAccessible
 }
-
 func MountSSHKnownHosts() bool {
 	if !isInitMountSSHKnownHosts {
 		mountSSHKnownHosts = boolFromEnv(EnvPrefix()+"_MOUNT_SSH_KNOWN_HOSTS", true)

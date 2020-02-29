@@ -3,8 +3,14 @@
 package config
 
 import (
+	"os"
 	"runtime"
 	"strconv"
+)
+
+var (
+	isInitSSHAuthSock        bool
+	sshAuthSock              string
 )
 
 func CPUsDefault() string {
@@ -19,4 +25,13 @@ func MemoryReservationDefault() string {
 		return "1g"
 	}
 	return ""
+}
+
+func SSHAuthSock() string {
+	if !isInitSSHAuthSock {
+		sshAuthSock = os.Getenv("SSH_AUTH_SOCK")
+		isInitSSHAuthSock = true
+	}
+
+	return sshAuthSock
 }

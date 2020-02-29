@@ -104,7 +104,7 @@ func (rc *RunCommand) ToolArgs() (args []string) {
 	}
 
 	args = append(args, rc.ExtraToolArgs...)
-	args = append(args, "--", config.Image())
+	args = append(args, "--", rc.Create.Image)
 	args = append(args, rc.CmdAndArgs...)
 
 	return

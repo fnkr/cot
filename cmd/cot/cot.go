@@ -11,6 +11,7 @@ import (
 func main() {
 	if config.Debug() {
 		config.PrintConfig(os.Stderr)
+		fmt.Fprintf(os.Stderr, "Version() = %v\n", Version())
 	}
 
 	if !config.IsInLimit(config.WorkDir()) {

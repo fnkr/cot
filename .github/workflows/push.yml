@@ -35,7 +35,7 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v2
       - name: Run build
-        run: cd cmd/cot && GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} GOROOT=/usr/local/${{ matrix.go }} PATH="/usr/local/${{ matrix.go }}/bin:${PATH}" go build -ldflags "-s -w" -o "../../cot_${{ matrix.os }}_${{ matrix.arch }}"
+        run: cd cmd/cot && GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} GOROOT=/usr/local/${{ matrix.go }} PATH="/usr/local/${{ matrix.go }}/bin:${PATH}" go build -ldflags "-s -w -X main.ref=$(git describe --all --dirty) -X main.sha=$(git rev-parse HEAD) -X main.buildDate=$(date --iso-8601=seconds)" -o "../../cot_${{ matrix.os }}_${{ matrix.arch }}"
       - name: Calculate checksum
         run: sha256sum cot_${{ matrix.os }}_${{ matrix.arch }}
       - name: Upload artifact

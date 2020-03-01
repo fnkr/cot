@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"io"
+	"runtime"
 )
 
 func PrintConfig(w io.Writer) {
@@ -42,4 +43,5 @@ func PrintConfig(w io.Writer) {
 	fmt.Fprintf(w, "Volumes() = %v\n", Volumes())
 	fmt.Fprintf(w, "Debug() = %v\n", Debug())
 	fmt.Fprintf(w, "DryRun() = %v\n", DryRun())
+	fmt.Fprintf(w, "runtime.Version() = %v\n", runtime.Version())
 }

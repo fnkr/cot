@@ -119,3 +119,24 @@ jobs:
           SNAPCRAFT_LOGIN: ${{ secrets.SNAPCRAFT_LOGIN }}
       - name: Push to Snapcraft
         run: cd cot_${{ matrix.os }}_${{ matrix.arch }}.snap && snapcraft push cot_${{ matrix.os }}_${{ matrix.arch }}.snap
+
+  release_homebrew:
+    if: startsWith(github.event.ref, 'refs/tags/')
+    needs:
+      - release_github
+    name: Release on Homebrew
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os:
+          - darwin
+        arch:
+          - amd64
+    steps:
+      - name: Update formula
+        run: curl -sSL https://raw.githubusercontent.com/fnkr/homebrew-public/master/update-version | bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_HOMEBREW }}
+          RELEASE_ASSET_NAME: cot_${{ matrix.os }}_${{ matrix.arch }}.tar.gz
+          FORMULA: Formula/cot.rb

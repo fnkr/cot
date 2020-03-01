@@ -93,32 +93,32 @@ jobs:
           GHR_PATH: cot_${{ matrix.os }}_${{ matrix.arch }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  release_snapcraft:
-    if: startsWith(github.event.ref, 'refs/tags/')
-    needs:
-      - test
-      - build_snap
-    name: Release on Snapcraft
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os:
-          - linux
-        arch:
-          - amd64
-    steps:
-      - name: Install Snapcraft
-        run: sudo apt update && sudo apt -y install snap && sudo snap install --classic snapcraft
-      - name: Download artifact
-        uses: actions/download-artifact@v1
-        with:
-          name: cot_${{ matrix.os }}_${{ matrix.arch }}.snap
-      - name: Login to Snapcraft
-        run: echo "$SNAPCRAFT_LOGIN" | snapcraft login --with -
-        env:
-          SNAPCRAFT_LOGIN: ${{ secrets.SNAPCRAFT_LOGIN }}
-      - name: Push to Snapcraft
-        run: cd cot_${{ matrix.os }}_${{ matrix.arch }}.snap && snapcraft push cot_${{ matrix.os }}_${{ matrix.arch }}.snap
+  #release_snapcraft:
+  #  if: startsWith(github.event.ref, 'refs/tags/')
+  #  needs:
+  #    - test
+  #    - build_snap
+  #  name: Release on Snapcraft
+  #  runs-on: ubuntu-latest
+  #  strategy:
+  #    matrix:
+  #      os:
+  #        - linux
+  #      arch:
+  #        - amd64
+  #  steps:
+  #    - name: Install Snapcraft
+  #      run: sudo apt update && sudo apt -y install snap && sudo snap install --classic snapcraft
+  #    - name: Download artifact
+  #      uses: actions/download-artifact@v1
+  #      with:
+  #        name: cot_${{ matrix.os }}_${{ matrix.arch }}.snap
+  #    - name: Login to Snapcraft
+  #      run: echo "$SNAPCRAFT_LOGIN" | snapcraft login --with -
+  #      env:
+  #        SNAPCRAFT_LOGIN: ${{ secrets.SNAPCRAFT_LOGIN }}
+  #    - name: Push to Snapcraft
+  #      run: cd cot_${{ matrix.os }}_${{ matrix.arch }}.snap && snapcraft push cot_${{ matrix.os }}_${{ matrix.arch }}.snap
 
   release_homebrew:
     if: startsWith(github.event.ref, 'refs/tags/')

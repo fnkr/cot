@@ -4,19 +4,26 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go:
+          - go1.12
+          - go1.13
     steps:
       - name: Install requirements
         run: sudo apt update && sudo apt -y install libselinux1-dev
       - name: Clone repository
         uses: actions/checkout@v2
       - name: Run tests
-        run: go test ./...
+        run: GOROOT=/usr/local/${{ matrix.go }} PATH="/usr/local/${{ matrix.go }}/bin:${PATH}" go test ./...
 
   build:
     name: Build
     runs-on: ubuntu-latest
     strategy:
       matrix:
+        go:
+          - go1.13
         os:
           - linux
           - darwin
@@ -28,7 +35,7 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v2
       - name: Run build
-        run: cd cmd/cot && GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -ldflags "-s -w" -o "../../cot_${{ matrix.os }}_${{ matrix.arch }}"
+        run: cd cmd/cot && GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} GOROOT=/usr/local/${{ matrix.go }} PATH="/usr/local/${{ matrix.go }}/bin:${PATH}" go build -ldflags "-s -w" -o "../../cot_${{ matrix.os }}_${{ matrix.arch }}"
       - name: Calculate checksum
         run: sha256sum cot_${{ matrix.os }}_${{ matrix.arch }}
       - name: Upload artifact

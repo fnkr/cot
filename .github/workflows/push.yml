@@ -44,6 +44,8 @@ jobs:
       - build
     strategy:
       matrix:
+        os:
+          - linux
         arch:
           - amd64
     steps:
@@ -54,16 +56,16 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v1
         with:
-          name: cot_linux_${{ matrix.arch }}
+          name: cot_${{ matrix.os }}_${{ matrix.arch }}
       - name: Build .snap
-        run: mkdir _build && mv cot_linux_${{ matrix.arch }}/cot_linux_${{ matrix.arch }} _build/cot && chmod a+x _build/cot && sudo snapcraft --use-lxd --target-arch ${{ matrix.arch }}
+        run: mkdir _build && mv cot_${{ matrix.os }}_${{ matrix.arch }}/cot_${{ matrix.os }}_${{ matrix.arch }} _build/cot && chmod a+x _build/cot && sudo snapcraft --use-lxd --target-arch ${{ matrix.arch }}
       - name: Calculate checksum
-        run: sha256sum cot_*.snap && mv cot_*.snap cot_linux_${{ matrix.arch }}.snap
+        run: sha256sum cot_*.snap && mv cot_*.snap cot_${{ matrix.os }}_${{ matrix.arch }}.snap
       - name: Upload artifact
         uses: actions/upload-artifact@v1
         with:
-          name: cot_linux_${{ matrix.arch }}.snap
-          path: cot_linux_${{ matrix.arch }}.snap
+          name: cot_${{ matrix.os }}_${{ matrix.arch }}.snap
+          path: cot_${{ matrix.os }}_${{ matrix.arch }}.snap
 
   release_github:
     if: startsWith(github.event.ref, 'refs/tags/')
@@ -100,6 +102,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
+        os:
+          - linux
         arch:
           - amd64
     steps:
@@ -108,10 +112,10 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v1
         with:
-          name: cot_linux_${{ matrix.arch }}.snap
+          name: cot_${{ matrix.os }}_${{ matrix.arch }}.snap
       - name: Login to Snapcraft
         run: echo "$SNAPCRAFT_LOGIN" | snapcraft login --with -
         env:
           SNAPCRAFT_LOGIN: ${{ secrets.SNAPCRAFT_LOGIN }}
       - name: Push to Snapcraft
-        run: cd cot_linux_${{ matrix.arch }}.snap && snapcraft push cot_linux_${{ matrix.arch }}.snap
+        run: cd cot_${{ matrix.os }}_${{ matrix.arch }}.snap && snapcraft push cot_${{ matrix.os }}_${{ matrix.arch }}.snap

@@ -29,20 +29,21 @@ sudo dnf install golang libselinux-devel
 sudo apt install golang libselinux1-dev
 ```
 
-## Build
+## Install
+
+### From source
 
 Only standard library and golang.org/x is used.
 
 ```sh
 go get github.com/fnkr/cot/cmd/cot
+sudo cp "$(go env GOPATH)/bin/cot" /usr/local/bin/
 ```
 
-## Install
-
-You can copy cot to some directory that is in your `$PATH` if you want. 
+### Via Homebrew
 
 ```sh
-(eval "$(go env)" && sudo cp "${GOBIN:-$GOPATH/bin}/cot" /usr/local/bin/)
+brew install fnkr/public/cot
 ```
 
 ## Usage

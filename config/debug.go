@@ -3,10 +3,12 @@ package config
 import (
 	"fmt"
 	"io"
+	"os"
 	"runtime"
 )
 
 func PrintConfig(w io.Writer) {
+	fmt.Fprintf(w, "$PATH = %v\n", os.Getenv("PATH"))
 	fmt.Fprintf(w, "BinName() = %v\n", BinName())
 	fmt.Fprintf(w, "CmdAndArgs() = %v\n", CmdAndArgs())
 	fmt.Fprintf(w, "Cmd() = %v\n", Cmd())

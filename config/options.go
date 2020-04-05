@@ -7,8 +7,6 @@ import (
 )
 
 var (
-	isInitEnvPrefix                 bool
-	envPrefix                       string
 	isInitImage                     bool
 	image                           string
 	isInitTmp                       bool
@@ -52,12 +50,7 @@ var (
 )
 
 func EnvPrefix() string {
-	if !isInitEnvPrefix {
-		envPrefix = strings.ToUpper(BinName())
-		isInitEnvPrefix = true
-	}
-
-	return envPrefix
+	return "COT"
 }
 
 func Image() string {

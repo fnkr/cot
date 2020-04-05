@@ -23,6 +23,11 @@
 | `COT_TOOL`                          | `"podman"` if found in `$PATH`, `"docker"` if found in `$PATH` and `$USER` is in `docker` group, otherwise `"sudo docker"` | `podman`, `docker`, or path to Podman or Docker (which must end with `/podman` or `/docker`) |
 | `COT_TTY`                           | `true`      | `--tty` |
 | `COT_VOLUME_*`                      | `[]`        | Additional volumes to mount (`COT_VOLUME_foo=/mnt/cot:/mnt:ro,z` will become `--volume=/mnt/cot:/mnt:ro,z`) |
+| `COT_ADD_USER_GROUPS`               | `false`     | Add groups of current user (`--add-group`) |
+| `COT_ADD_USER_GROUPS_EXCEPT`        | `[]`        | Comma separated list of group names to exclude when adding groups of current user |
+| `COT_ADD_USER_GROUPS_EXCEPT_*`      | `[]`        | Additional group names to exclude or not to exclude when adding groups of current user (`COT_ADD_USER_GROUPS_EXCEPT_docker=true` is equal to `COT_ADD_USER_GROUPS_EXCEPT=docker`, `COT_ADD_USER_GROUPS_EXCEPT_docker=false` will override `COT_ADD_USER_GROUPS_EXCEPT=docker`). `__` will be replaced with `-`. |
+| `COT_ADD_GROUPS`                    | `[]`        | Comma separated list of group names to add (`--add-group`) |
+| `COT_ADD_GROUP_*`                   | `[]`        | Additional group names to add or not to add (`COT_ADD_GROUP_wheel=true` will become `--add-group=<id of wheel group>`, `COT_ADD_GROUP_wheel=false` will override `COT_ADD_GROUPS=wheel`). `__` will be replaced with `-`. |
 | `EDITOR`                            | -           | Variable will be forwarded to container as-is |
 | `SSH_AUTH_SOCK`                     | -           | Path to SSH agent socket (will be mounted in container if set) |
 | `COT_MAKE_SSH_AUTH_SOCK_ACCESSIBLE` | `true`      | Automatically apply platform-specific fixes to ensure `$SSH_AUTH_SOCK` is accessible from Docker containers |

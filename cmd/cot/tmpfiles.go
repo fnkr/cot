@@ -75,22 +75,26 @@ func writeGroupFile() {
 		}
 	}()
 
-	if err := group.Write(group.File{
-		Groups: []group.Group{
-			group.Group{
-				Name: "root",
-				GID:  "0",
-			},
-			group.Group{
-				Name: "nobody",
-				GID:  "65534",
-			},
-			group.Group{
-				Name: config.Group(),
-				GID:  config.GID(),
-			},
+	groups := []group.Group{
+		group.Group{
+			Name: "root",
+			GID:  "0",
 		},
-	}, file); err != nil {
+		group.Group{
+			Name: "nobody",
+			GID:  "65534",
+		},
+	}
+
+	for _, grp := range config.AddGroupsFinal() {
+		groups = append(groups, group.Group{
+			GID:     grp.Gid,
+			Name:    grp.Name,
+			Members: []string{config.User()},
+		})
+	}
+
+	if err := group.Write(group.File{Groups: groups}, file); err != nil {
 		fmt.Fprintf(os.Stderr, "%s: error: %s\n", config.BinName(), err.Error())
 		os.Exit(1)
 	}

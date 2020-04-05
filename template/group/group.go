@@ -2,6 +2,7 @@ package group
 
 import (
 	"io"
+	"strings"
 	"text/template"
 )
 
@@ -14,8 +15,9 @@ type File struct {
 }
 
 type Group struct {
-	Name string
-	GID  string
+	Name    string
+	GID     string
+	Members []string
 }
 
 func Write(f File, w io.Writer) error {
@@ -23,15 +25,15 @@ func Write(f File, w io.Writer) error {
 }
 
 func init() {
-	t, err := template.New("group").Parse(`
+	t := template.New("group")
+	t.Funcs(template.FuncMap{"JoinStrings": strings.Join})
+	if _, err := t.Parse(`
 {{define "group" -}}
 {{range .Groups -}}
-{{.Name}}:x:{{.GID}}:
+{{.Name}}:x:{{.GID}}:{{ JoinStrings .Members "," }}
 {{end}}
 {{- end}}
-	`)
-
-	if err != nil {
+	`); err != nil {
 		panic(err.Error())
 	}
 

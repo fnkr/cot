@@ -11,6 +11,7 @@ import (
 var (
 	isInitGroup   bool
 	group         string
+	groups        []user.Group
 	inDockerGroup bool
 )
 
@@ -34,6 +35,8 @@ func initGroup() {
 			os.Exit(1)
 		}
 
+		groups = append(groups, *g)
+
 		if u.Gid == g.Gid {
 			group = g.Name
 		}
@@ -52,6 +55,14 @@ func Group() string {
 	}
 
 	return group
+}
+
+func Groups() []user.Group {
+	if !isInitGroup {
+		initGroup()
+	}
+
+	return groups
 }
 
 func InDockerGroup() bool {

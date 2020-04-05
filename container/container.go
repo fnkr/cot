@@ -18,6 +18,7 @@ type CreateCommand struct {
 	Image             string
 	Rm                bool
 	User              string
+	GroupAdd          []string
 	UIDMaps           []UIDMap
 	ReadOnlyRoot      bool
 	Net               string
@@ -61,6 +62,10 @@ func (rc *RunCommand) ToolArgs() (args []string) {
 		if config.ToolName() == config.PODMAN {
 			args = append(args, "--userns=keep-id")
 		}
+	}
+
+	for _, group := range rc.Create.GroupAdd {
+		args = append(args, "--group-add="+group)
 	}
 
 	for _, uidmap := range rc.Create.UIDMaps {

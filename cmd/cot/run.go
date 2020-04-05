@@ -70,7 +70,6 @@ func getRun() container.RunCommand {
 		}
 	}
 
-
 	if config.MountSSHKnownHosts() {
 		volumes = append(volumes, container.Volume{
 			HostDir:      config.HomeDir() + "/.ssh/known_hosts",
@@ -79,7 +78,6 @@ func getRun() container.RunCommand {
 			SELabel:      config.SELinuxEnabled(),
 		})
 	}
-
 
 	if editor := os.Getenv("EDITOR"); editor != "" {
 		env["EDITOR"] = editor
@@ -90,9 +88,13 @@ func getRun() container.RunCommand {
 	}
 
 	toolArgs := config.ToolArgs()
-
 	for _, volume := range config.Volumes() {
 		toolArgs = append(toolArgs, "--volume="+volume)
+	}
+
+	groups := []string{}
+	for _, group := range config.AddGroupsFinal() {
+		groups = append(groups, group.Gid)
 	}
 
 	run := container.RunCommand{
@@ -103,6 +105,7 @@ func getRun() container.RunCommand {
 			Image:             config.Image(),
 			Rm:                true,
 			User:              config.UID() + ":" + config.GID(),
+			GroupAdd:          groups,
 			ReadOnlyRoot:      config.ReadOnlyRoot(),
 			Net:               config.Network(),
 			Volumes:           volumes,

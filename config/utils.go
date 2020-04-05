@@ -7,8 +7,7 @@ import (
 	"strings"
 )
 
-func boolFromEnv(key string, def bool) bool {
-	val := os.Getenv(key)
+func boolFromStr(val string, def bool) bool {
 	if val == "" {
 		return def
 	}
@@ -18,6 +17,10 @@ func boolFromEnv(key string, def bool) bool {
 		os.Exit(1)
 	}
 	return res
+}
+
+func boolFromEnv(key string, def bool) bool {
+	return boolFromStr(os.Getenv(key), def)
 }
 
 func listFromEnv(key, sep string) (res []string) {
@@ -47,4 +50,22 @@ func listFromEnvs(prefix string) map[string]string {
 	}
 
 	return list
+}
+
+func stringInSlice(search string, slice []string) bool {
+	for _, value := range slice {
+		if search == value {
+			return true
+		}
+	}
+	return false
+}
+
+func removeStringFromSlice(search string, slice []string) []string {
+	for i, value := range slice {
+		if value == search {
+			return removeStringFromSlice(search, append(slice[:i], slice[i+1:]...))
+		}
+	}
+	return slice
 }

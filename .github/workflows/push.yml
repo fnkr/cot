@@ -9,6 +9,7 @@ jobs:
         go:
           - go1.12
           - go1.13
+          - go1.14
     steps:
       - name: Install requirements
         run: sudo apt update && sudo apt -y install libselinux1-dev
@@ -23,7 +24,7 @@ jobs:
     strategy:
       matrix:
         go:
-          - go1.13
+          - go1.14
         os:
           - linux
           - darwin

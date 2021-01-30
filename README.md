@@ -67,7 +67,7 @@ A full list of configuration options can be found in [`ENVIRONMENT.md`](ENVIRONM
 
 ## Custom images
 
-By default the `fnkr/cot` image is used.
+By default the `ghcr.io/fnkr/cot` image is used.
 You can use any image you like, I'd recommend to create your own.
 You can use a custom image by setting the `COT_IMAGE` environment variable.
 

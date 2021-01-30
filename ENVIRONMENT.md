@@ -10,7 +10,7 @@
 | `COT_DEBUG`                         | `false`     | Send debug output to `/dev/stderr` |
 | `COT_DRY_RUN`                       | `false`     | Do not actually execute Docker/Podman command |
 | `COT_ENV_*`                         | `[]`        | Additional environment variables to set (`COT_ENV_foo=bar` will become `--env=foo=bar`) |
-| `COT_IMAGE`                         | `fnkr/cot`  | Docker/Podman image to use |
+| `COT_IMAGE`                         | `ghcr.io/fnkr/cot`  | Docker/Podman image to use |
 | `COT_INTERACTIVE`                   | `true`      | `--interactive` |
 | `COT_LIMIT`                         | `[]`        | Directories in which cot is allowed to run, separated by colon (`:`) |
 | `COT_MEMORY`                        | -           | [`--memory`](https://docs.docker.com/engine/reference/run/#runtime-constraints-on-resources) |

@@ -57,7 +57,7 @@ func Image() string {
 	if !isInitImage {
 		image = os.Getenv(EnvPrefix() + "_IMAGE")
 		if image == "" {
-			image = "fnkr/cot"
+			image = "ghcr.io/fnkr/cot"
 		}
 		isInitImage = true
 	}

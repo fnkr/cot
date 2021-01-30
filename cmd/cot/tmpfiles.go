@@ -76,13 +76,17 @@ func writeGroupFile() {
 	}()
 
 	groups := []group.Group{
-		group.Group{
+		{
 			Name: "root",
 			GID:  "0",
 		},
-		group.Group{
+		{
 			Name: "nobody",
 			GID:  "65534",
+		},
+		{
+			Name: config.Group(),
+			GID:  config.GID(),
 		},
 	}
 

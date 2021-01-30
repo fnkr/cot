@@ -57,7 +57,7 @@ with any tool that can run within a Podman/Docker container.
 export COT_LIMIT=~/test:~/example
 
 # You can call npm with "cot npm" or link npm to cot and call it just "npm".
-sudo ln -s /usr/local/bin/cot /usr/local/bin/npm
+sudo ln -sn cot /usr/local/bin/npm
 
 # Done! This will run npm in a container.
 npm install

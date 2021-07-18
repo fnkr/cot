@@ -2,14 +2,10 @@ package config
 
 import (
 	"fmt"
+	"github.com/fnkr/cot/container"
 	"os"
 	"os/exec"
 	"strings"
-)
-
-const (
-	PODMAN = "podman"
-	DOCKER = "docker"
 )
 
 var (
@@ -64,9 +60,9 @@ func ToolName() string {
 	if !isInitToolName {
 		for _, toolPart := range Tool() {
 			if strings.HasSuffix(toolPart, "/podman") || toolPart == "podman" {
-				toolName = PODMAN
+				toolName = container.PODMAN
 			} else if strings.HasSuffix(toolPart, "/docker") || toolPart == "docker" {
-				toolName = DOCKER
+				toolName = container.DOCKER
 			}
 			if toolName != "" {
 				break

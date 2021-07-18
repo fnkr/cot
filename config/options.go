@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"github.com/fnkr/cot/container"
 	"os"
 	"strings"
 )
@@ -42,7 +43,9 @@ var (
 	isInitEnv                       bool
 	env                             map[string]string
 	isInitVolumes                   bool
-	volumes                         []string
+	volumes                         []container.Volume
+	isInitCustomWorkingDirVolume    bool
+	customWorkingDirVolume          bool
 	isInitDebug                     bool
 	debug                           bool
 	isInitDryRun                    bool
@@ -80,7 +83,7 @@ func Tmp() string {
 func ReadOnlyRoot() bool {
 	if !isInitReadOnlyRoot {
 		def := true
-		if ToolName() == PODMAN {
+		if ToolName() == container.PODMAN {
 			def = false
 		}
 		readOnlyRoot = boolFromEnv(EnvPrefix()+"_READ_ONLY_ROOT", def)
@@ -94,9 +97,9 @@ func Network() string {
 	if !isInitNet {
 		net = os.Getenv(EnvPrefix() + "_NET")
 		if net == "" {
-			if ToolName() == PODMAN {
+			if ToolName() == container.PODMAN {
 				net = "slirp4netns"
-			} else if ToolName() == DOCKER {
+			} else if ToolName() == container.DOCKER {
 				net = "bridge"
 			} else {
 				fmt.Fprintf(os.Stderr, "%s: error: not implemented: ToolName(%s)\n", BinName(), ToolName())
@@ -235,18 +238,64 @@ func Env() map[string]string {
 	return env
 }
 
-func Volumes() []string {
+func volumeFromString(volStr string) container.Volume {
+	volSlice := strings.Split(volStr, ":")
+
+	hostDir := volSlice[0]
+	if len(volSlice) < 2 {
+		fmt.Fprintf(os.Stderr, "%s: error: unable to parse volume definition: %s\n", BinName(), volStr)
+		os.Exit(1)
+	}
+	containerDir := volSlice[1]
+
+	var options []string
+	if len(volSlice) > 2 {
+		options = strings.Split(volSlice[2], ",")
+	}
+
+	writable := true
+
+	for _, option := range options {
+		switch option {
+		case "ro":
+			writable = false
+		}
+	}
+
+	return container.Volume{
+		HostDir:      hostDir,
+		ContainerDir: containerDir,
+		Writable:     writable,
+		SELabel:      SELinuxEnabled(),
+	}
+}
+
+func Volumes() []container.Volume {
 	if !isInitVolumes {
 		for _, volume := range listFromEnvs(EnvPrefix() + "_VOLUME_") {
 			if volume == "" {
 				continue
 			}
-			volumes = append(volumes, volume)
+			volumes = append(volumes, volumeFromString(volume))
 		}
 		isInitVolumes = true
 	}
 
 	return volumes
+}
+
+func CustomWorkingDirVolume() bool {
+	if !isInitCustomWorkingDirVolume {
+		for _, volume := range Volumes() {
+			if volume.HostDir == WorkDir() {
+				customWorkingDirVolume = true
+				break
+			}
+		}
+		isInitCustomWorkingDirVolume = true
+	}
+
+	return customWorkingDirVolume
 }
 
 func Debug() bool {

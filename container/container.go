@@ -1,9 +1,13 @@
 package container
 
 import (
-	"github.com/fnkr/cot/config"
 	"strconv"
 	"strings"
+)
+
+const (
+	PODMAN = "podman"
+	DOCKER = "docker"
 )
 
 type RunCommand struct {
@@ -45,11 +49,11 @@ type UIDMap struct {
 	Amount       string
 }
 
-func (rc *RunCommand) ToolCmdAndArgs() []string {
-	return append([]string{"run"}, rc.ToolArgs()...)
+func (rc *RunCommand) ToolCmdAndArgs(toolName string) []string {
+	return append([]string{"run"}, rc.ToolArgs(toolName)...)
 }
 
-func (rc *RunCommand) ToolArgs() (args []string) {
+func (rc *RunCommand) ToolArgs(toolName string) (args []string) {
 	args = append(args,
 		"--tty="+strconv.FormatBool(rc.TTY),
 		"--interactive="+strconv.FormatBool(rc.Interactive),
@@ -59,7 +63,7 @@ func (rc *RunCommand) ToolArgs() (args []string) {
 
 	if rc.Create.User != "" {
 		args = append(args, "--user="+rc.Create.User)
-		if config.ToolName() == config.PODMAN {
+		if toolName == PODMAN {
 			args = append(args, "--userns=keep-id")
 		}
 	}

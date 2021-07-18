@@ -13,13 +13,13 @@ func getRun() container.RunCommand {
 		container.Volume{
 			HostDir:      config.Tmp() + "/etc/passwd",
 			ContainerDir: "/etc/passwd",
-			Writable:     config.ToolName() == config.PODMAN,
+			Writable:     config.ToolName() == container.PODMAN,
 			SELabel:      false,
 		},
 		container.Volume{
 			HostDir:      config.Tmp() + "/etc/group",
 			ContainerDir: "/etc/group",
-			Writable:     config.ToolName() == config.PODMAN,
+			Writable:     config.ToolName() == container.PODMAN,
 			SELabel:      false,
 		},
 		container.Volume{
@@ -40,12 +40,15 @@ func getRun() container.RunCommand {
 			Writable:     true,
 			SELabel:      config.SELinuxEnabled(),
 		},
-		container.Volume{
+	}
+
+	if !config.CustomWorkingDirVolume() {
+		volumes = append(volumes, container.Volume{
 			HostDir:      config.WorkDir(),
 			ContainerDir: config.WorkDir(),
 			Writable:     true,
 			SELabel:      config.SELinuxEnabled(),
-		},
+		})
 	}
 
 	env := map[string]string{
@@ -57,7 +60,7 @@ func getRun() container.RunCommand {
 		volumes = append(volumes, container.Volume{
 			HostDir:      config.SSHAuthSock(),
 			ContainerDir: containerSSHAuthSock,
-			Writable:     config.ToolName() == config.PODMAN,
+			Writable:     config.ToolName() == container.PODMAN,
 			SELabel:      config.SELinuxEnabled(),
 		})
 		env["SSH_AUTH_SOCK"] = containerSSHAuthSock
@@ -88,8 +91,9 @@ func getRun() container.RunCommand {
 	}
 
 	toolArgs := config.ToolArgs()
+
 	for _, volume := range config.Volumes() {
-		toolArgs = append(toolArgs, "--volume="+volume)
+		volumes = append(volumes, volume)
 	}
 
 	groups := []string{}

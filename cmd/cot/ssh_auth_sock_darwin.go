@@ -51,7 +51,7 @@ func makeSSHAuthSockAccessible() error {
 			},
 		},
 	}
-	cmd := append(config.Tool(), run.ToolCmdAndArgs()...)
+	cmd := append(config.Tool(), run.ToolCmdAndArgs(config.ToolName())...)
 
 	if config.Debug() {
 		fmt.Fprintf(os.Stderr, "cmd = %+v\n", cmd)

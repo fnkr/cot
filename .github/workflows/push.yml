@@ -33,6 +33,10 @@ jobs:
           - darwin
         arch:
           - amd64
+        include:
+          - go: 1.16
+            os: darwin
+            arch: arm64
     steps:
       - name: Install requirements
         run: sudo apt update && sudo apt -y install libselinux1-dev
@@ -96,6 +100,9 @@ jobs:
           - darwin
         arch:
           - amd64
+        include:
+          - os: darwin
+            arch: arm64
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v1

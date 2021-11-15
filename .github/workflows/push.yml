@@ -7,8 +7,8 @@ jobs:
     strategy:
       matrix:
         go:
-          - 1.15
           - 1.16
+          - 1.17
     steps:
       - name: Install requirements
         run: sudo apt update && sudo apt -y install libselinux1-dev
@@ -27,14 +27,14 @@ jobs:
     strategy:
       matrix:
         go:
-          - 1.16
+          - 1.17
         os:
           - linux
           - darwin
         arch:
           - amd64
         include:
-          - go: 1.16
+          - go: 1.17
             os: darwin
             arch: arm64
     steps:
